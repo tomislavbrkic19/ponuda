@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Ponuda.Models.Ponude>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PonudaID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UkupnaCijena)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DatumPonude)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <th>
+            @Html.DisplayFor(model => item.PonudaID)
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => item.UkupnaCijena)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DatumPonude)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.PonudaID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.PonudaID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.PonudaID })
+        </td>
+    </tr>
+}
+
+</table>
