@@ -11,7 +11,8 @@ namespace Ponuda.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Ponude
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,6 +23,8 @@ namespace Ponuda.Models
     
         public int PonudaID { get; set; }
         public Nullable<decimal> UkupnaCijena { get; set; }
+
+        [DataType(DataType.Date)]
         public Nullable<System.DateTime> DatumPonude { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

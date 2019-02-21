@@ -6,18 +6,26 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using Ponuda.Models;
 
 namespace Ponuda.Controllers
 {
-    public class PonudesController : Controller
+    public class PonudeController : Controller
     {
         private testDBEntities db = new testDBEntities();
 
         // GET: Ponudes
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string CurrentSort, int? page)
         {
-            return View(db.Ponude.ToList());
+            int pageSize = 100;
+            int pageIndex = 1;
+            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            IPagedList<Ponude> svePonude = null;
+
+
+            svePonude = db.Ponude.OrderBy(x=>x.PonudaID).ToPagedList(pageIndex, pageSize);
+            return View(svePonude);
         }
 
         // GET: Ponudes/Details/5
@@ -123,5 +131,9 @@ namespace Ponuda.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+       
+
     }
 }

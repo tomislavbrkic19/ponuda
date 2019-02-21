@@ -1,0 +1,127 @@
+﻿@model PagedList.IPagedList<Ponuda.Models.Ponude>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    table {
+        width: 100%;
+    }
+        table tr td, th  {
+            border: 2px solid black;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        table tr:hover,table th:hover {
+            background-color: #000;
+            color: #fff;
+        }
+
+        table tr th {
+            border: 2px solid black;
+            text-align: center;
+            background-color: #fff;
+            color: #000;
+        }
+    .table-wrapper-scroll-y {
+        display: block;
+        max-height: 600px;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+</style>
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="row">
+    <div class="col-md-4">
+        Lijevo
+        <div class="table-wrapper-scroll-y">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        Ponuda ID @*@Html.DisplayNameFor(model => model.PonudaID)*@
+                    </th>
+                    <th>
+                        Datum  @*@Html.DisplayNameFor(model => model.UkupnaCijena)*@
+                    </th>
+                    <th>
+                        Cijena @*@Html.DisplayNameFor(model => model.DatumPonude)*@
+                    </th>
+
+                </tr>
+
+                @foreach (var item in Model)
+                {            <tr>
+                <th>
+                    @Html.DisplayFor(model => item.PonudaID)
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DatumPonude)
+                </td>
+                <td>
+                    <a href="#" data-toggle="onclick" data-trigger="onclick" id="@item.PonudaID">@item.UkupnaCijena</a>
+                @*<td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.PonudaID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.PonudaID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.PonudaID })
+            </td>*@
+            </tr>
+
+}
+
+
+            </table>
+        </div>
+            <br />
+            <div id='Paging' style="text-align:center">
+                Stranica @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+                od @Model.PageCount
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+            </div>
+        </div>
+    <div class="col-md-8">
+        <div class="row" style="height:100px">
+            Header ponude
+        </div>
+        <div class="row">
+            Sadržaj ponude
+        </div>
+    </div>
+
+
+    </div>
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="onclick"]').popover({
+            title: setData,
+            html: true,
+            placement: 'right'
+
+        });
+        function setData(id) {
+            var set_data = '';
+            var element = $(this);
+            var id = element.attr("id");
+            $.ajax({
+                url: "/Ponude/Details/" + id,
+                method: "post",
+                async: false,
+                data: { id: id },
+                success: function (data) {
+                    set_data = data;
+                }
+
+            });
+            return set_data;
+        }
+    });
+</script>

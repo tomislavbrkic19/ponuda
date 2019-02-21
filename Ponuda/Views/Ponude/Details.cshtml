@@ -1,0 +1,49 @@
+﻿@model Ponuda.Models.Ponude
+@{
+    ViewBag.Title = "PonudaDetail";
+}
+<div class="container" style="color: #000;width:200px;">
+    <h4 style=" text-align:center;border-bottom:1px solid #808080;">Detalji ponude</h4>
+    @*@foreach (var item in Model)
+    {*@
+        <p><label>Broj ponude : </label> @Model.PonudaID</p>
+        @*<p><label>Email : </label> @Model.Stavke</p>*@
+        <p><label>Ukupna cijena : </label> @Model.UkupnaCijena</p>
+        <p><label>Datum ponude : </label> @Model.DatumPonude</p>
+    @*}*@
+</div>
+
+@*@model Ponuda.Models.Ponude
+
+    @{
+        ViewBag.Title = "Details";
+    }
+
+    <h2>Details</h2>
+
+    <div>
+        <h4>Ponude</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.UkupnaCijena)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.UkupnaCijena)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DatumPonude)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DatumPonude)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.PonudaID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>*@
