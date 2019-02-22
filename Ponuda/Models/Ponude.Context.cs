@@ -25,8 +25,8 @@ namespace Ponuda.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Artikli> Artikli { get; set; }
         public virtual DbSet<Ponude> Ponude { get; set; }
         public virtual DbSet<Stavke> Stavke { get; set; }
+        public virtual DbSet<Artikli> Artikli { get; set; }
     }
 }

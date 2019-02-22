@@ -20,7 +20,7 @@ namespace Ponuda.Models
         public Nullable<int> Kolicina { get; set; }
         public Nullable<decimal> UkupnaCijenaStavke { get; set; }
     
+        private  Ponude Ponude { get; set; }
         public virtual Artikli Artikli { get; set; }
-        public virtual Ponude Ponude { get; set; }
     }
 }

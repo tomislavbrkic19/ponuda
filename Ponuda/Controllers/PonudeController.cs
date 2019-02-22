@@ -14,6 +14,7 @@ namespace Ponuda.Controllers
     public class PonudeController : Controller
     {
         private testDBEntities db = new testDBEntities();
+       
 
         // GET: Ponudes
         public ActionResult Index(string sortOrder, string CurrentSort, int? page)
@@ -132,8 +133,27 @@ namespace Ponuda.Controllers
             base.Dispose(disposing);
         }
 
+        //// GET: Ponudes/DetailsPonuda/5
+        //public ActionResult DetailsPonuda(int? id)
+        //{
 
-       
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //   var lookup = db.Ponude.ToLookup(x => x.PonudaID);
+        //    if (lookup == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    foreach (var p in lookup)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine(p.ToString());
+
+        //    }
+        //    return View(lookup);
+        //}
+
 
     }
 }
