@@ -8,13 +8,15 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using Ponuda.Models;
+using Newtonsoft.Json;
+
 
 namespace Ponuda.Controllers
 {
     public class PonudeController : Controller
     {
         private testDBEntities db = new testDBEntities();
-       
+
 
         // GET: Ponudes
         public ActionResult Index(string sortOrder, string CurrentSort, int? page)
@@ -25,7 +27,7 @@ namespace Ponuda.Controllers
             IPagedList<Ponude> svePonude = null;
 
 
-            svePonude = db.Ponude.OrderBy(x=>x.PonudaID).ToPagedList(pageIndex, pageSize);
+            svePonude = db.Ponude.OrderBy(x => x.PonudaID).ToPagedList(pageIndex, pageSize);
             return View(svePonude);
         }
 
@@ -43,6 +45,43 @@ namespace Ponuda.Controllers
             }
             return View(ponude);
         }
+
+
+        // GET: Ponude/StavkaEdit/5
+        public ActionResult StavkaEdit(int? id)
+        {
+            Stavke ponude = db.Stavke.Find(id);
+            if (ponude == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView("StavkaEdit", ponude);
+
+        }
+        [HttpPost]
+        public ActionResult StavkaEdit(Stavke stavka)
+
+        {
+
+            Stavke jednastavka = db.Stavke.Where(m => m.StavkaId == stavka.StavkaId).FirstOrDefault();
+
+            jednastavka.UkupnaCijenaStavke = stavka.UkupnaCijenaStavke;
+            jednastavka.Kolicina = stavka.Kolicina;
+
+
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Ponude");
+
+
+
+        }
+
+
+
+
+
 
         // GET: Ponudes/Create
         public ActionResult Create()
@@ -133,27 +172,29 @@ namespace Ponuda.Controllers
             base.Dispose(disposing);
         }
 
-        //// GET: Ponudes/DetailsPonuda/5
-        //public ActionResult DetailsPonuda(int? id)
-        //{
+        public JsonResult GetPonudaById(int PonudaId)
+        {
+            var lookup = db.Ponude.Where(x => x.PonudaID == PonudaId).SingleOrDefault();
+          
+            string value = string.Empty;
+            value = JsonConvert.SerializeObject(lookup, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            return Json(value, JsonRequestBehavior.AllowGet);
+        }
 
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //   var lookup = db.Ponude.ToLookup(x => x.PonudaID);
-        //    if (lookup == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    foreach (var p in lookup)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine(p.ToString());
-
-        //    }
-        //    return View(lookup);
-        //}
-
-
+        public JsonResult GetStavkaById(int StavkaId)
+        {
+            System.Diagnostics.Debug.WriteLine("Dobio sam StavkaID:" + StavkaId);
+            var stavka = db.Stavke.Where(x => x.StavkaId == StavkaId).SingleOrDefault();
+            string value = string.Empty;
+            value = JsonConvert.SerializeObject(stavka, Formatting.None, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            return Json(value, JsonRequestBehavior.AllowGet);
+        }
     }
+    
 }
