@@ -18,103 +18,240 @@
             {
                 @Html.AntiForgeryToken()
 
-                <div class="form-horizontal">
-                    <h4>Edit Stavke</h4>
-                    <hr />
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @*@Html.HiddenFor(model => model.PonudaID)*@
+            <div class="form-horizontal">
+                <h4>Edit Stavke</h4>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.StavkaId, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.StavkaId, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.StavkaId, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @*@Html.HiddenFor(model => model.PonudaID)*@
 
-                    <div class="form-group">
-                        @*@Html.LabelFor(model => model.Artikli.NazivArtikla, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                        <div class="col-md-10">
-                            @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "20", 20 }, { "100", 100 } }, "Key", "Value", Model.PageSize), new { @class = "pro_pag_tf1", id = "pagesizelist" })
-                            @*<select class="form-control" id="Artikli" name="Artikli"></select>*@  
-                            @*@Html.DropDownList("ArtikalId"), (IEnumerable<SelectListItem>)ViewBag.Artikli, null, new { @class = "form-control" })*@
-                           
-                            @Html.ValidationMessageFor(model => model.Artikli.NazivArtikla, "", new { @class = "text-danger" })
-                        </div>
+                @Html.Hidden("StavkaId")
+                @Html.Hidden("ArtikalId")
+                @*<div class="form-group">
+            @Html.LabelFor(model => model.StavkaId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StavkaId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StavkaId, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <label class="control-label col-md-2">Odabrani artikal:</label>
                     </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Artikli.JedCijenaArtikla, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Artikli.JedCijenaArtikla, new { htmlAttributes = new { @class = "form-control disabled" } })
-                            @Html.ValidationMessageFor(model => model.Artikli.JedCijenaArtikla, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Kolicina, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Kolicina, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Kolicina, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.UkupnaCijenaStavke, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.UkupnaCijenaStavke, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.UkupnaCijenaStavke, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Save" class="btn btn-default" />
-                        </div>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Artikli.NazivArtikla, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <label class="control-label col-md-2">Popis artikala:</label>
+                    </div>
+                    <div class="col-md-9">
+                        <select class="form-control" id="Artikli" name="Artikli" size="5"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Artikli.JedCijenaArtikla, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    </div>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Artikli.JedCijenaArtikla, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.Artikli.JedCijenaArtikla, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Kolicina, htmlAttributes: new { @class = "control-label col-md-2" })
+                    </div>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Kolicina, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Kolicina, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.UkupnaCijenaStavke, htmlAttributes: new { @class = "control-label col-md-2" })
+                    </div>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.UkupnaCijenaStavke, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UkupnaCijenaStavke, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
             }
 
             @*<div>
-                @Html.ActionLink("Back to List", "Index")
-            </div>*@
+                    @Html.ActionLink("Back to List", "Index")
+                </div>*@
 
             @section Scripts {
                 @Scripts.Render("~/bundles/jqueryval")
             }
 
-            </div>
+        </div>
 
-                </div>
+    </div>
 
-                    </div>
-<script>
-   
+</div>
+
+
+<script type="text/javascript">
+
+    var pageSize = 20;
+    var pageIndex = 0;
+
+    var selectObj = $("#Artikli");
+    var singleoptionheight = selectObj.find("option").height();
+    var selectboxheight = selectObj.height();
+    var numOfOptionBeforeToLoadNextSet = 2;
+    var lastScrollTop = 0;
+    var currentPageNo = 1;
+    var isAppending = false;
+    var currentScroll = 0;
+
+    var JsonArtikli;
+     s= '<option ></option>';
     $(document).ready(function () {
-        var sviArtikli ;
-        if (sviArtikli != null) {
-            //console.log("2-put nisu null:" + sviArtikli);
-        } else {
+        GetData();
 
-            console.log("1-put jesu null:" + sviArtikli);
-            $.ajax({
-                type: "GET",
-                url: "/api/Data/GetArtikli",
-                data: "",
-                async: false,
-                success: function (data) {
-                    sviArtikli = data;
-                    //console.log('Poslije poziva');
-                    //console.log(sviArtikli);
+
+
+        $("#Artikli").scroll(function (event) {
+            console.log('Skorlam');
+                var st = $(selectObj).scrollTop();
+                var totalheight = selectObj.find("option").length * singleoptionheight;
+                if (st > lastScrollTop) {
+                    // downscroll code
+                    currentScroll = st + selectboxheight;
+                    if ((currentScroll + (numOfOptionBeforeToLoadNextSet * singleoptionheight)) >= totalheight) {
+                        currentPageNo++;
+                        
+                        s += '<option value="' + @Html.Raw(Json.Encode(Model.ArtikalId)) + '">' + @Html.Raw(Json.Encode(Model.Artikli.NazivArtikla)) + '</option>';
+                        GetData(0);
+                    }
+                } else {
+                    // upscroll code
                 }
+                lastScrollTop = st;
             });
-        }
-        //console.log("Drugi put");
-        //console.log(sviArtikli);
-        var s = '<option value="-1">Select Artikla</option>';
-        for (var i = 0; i < sviArtikli.length; i++) {
-            s += '<option value="' + sviArtikli[i].ArtikalId + '">' + sviArtikli[i].NazivArtikla + '</option>';
-        }
-       
-        $("#Artikli").html(s);
+
+        $("#Artikli").on('click', function () {
+          // find artikal i kalkulacija
+            //console.log('pero');
+            SetArtikal($(this).find("option:selected").text());
+            GetJedCijena(this.value);
+            Calculate();
+
+        });
+
+        $("#Kolicina").on('change', function () {
+            // find artikal i kalkulacija
+            //console.log('pero');
+            GetJedCijena($("#Artikli").val());
+            Calculate();
+
+        });
+
+
     });
-       
+
+
+    function GetData(up) {
+
+        var id = $("#ArtikalId").val();
+
+
+        $.ajax({
+            type: 'GET',
+            url: '/Ponude/GetArtikls',
+            data: { "id":id,"pageindex": pageIndex, "pagesize": pageSize },
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    JsonArtikli = data;
+                    //for (var i = 0; i < data.length; i++) {
+                    //    $("#Artikli").append("<h2>" +
+                    //        data[i].NazivArtikla + "</h2>");
+
+                     @*s += '<option value="' + @Html.Raw(Json.Encode(Model.ArtikalId)) + '">' + @Html.Raw(Json.Encode(Model.Artikli.NazivArtikla)) + '</option>';*@
+                    for (var i = 0; i < data.length; i++) {
+                        s += '<option value="' + data[i].ArtikalId + '">' + data[i].NazivArtikla + '</option>';
+                      //  dropdown.append($('<option></option>').attr('value', data[i].ArtikalId).text(data[i].NazivArtikla));
+                    }
+                    $("#Artikli").html(s);
+                    //$('#Artikli option')[1].selected = true;
+                    //console.log("Označlen:");
+                    //console.log($("#Artikli").find("option:selected").val());
+                    //SetArtikal($("#Artikli").find("option:selected").text());
+                    Calculate();
+                    //}
+                    pageIndex++;
+                }
+            },
+            beforeSend: function () {
+                //$("#progress").show();
+            },
+            complete: function () {
+                //$("#progress").hide();
+            },
+            error: function () {
+                alert("Error while retrieving data!");
+            }
+        });
+    };
+    function SetArtikal(x) {
+
+        $("#Artikli_NazivArtikla").val(x);
+
+
+    };
+
+    function GetJedCijena(id) {
+        $.ajax({
+            url: "/Ponude/GetArtikalById/" + id,
+            method: "GET",
+            async: false,
+            data: { id: id },
+            success: function (data) {
+                console.log(data[0].JedCijenaArtikla);
+                $("#Artikli_JedCijenaArtikla").val(roundNumber(data[0].JedCijenaArtikla));
+            }
+        });
+    };
+    function Calculate() {
+        var jedinicnaCijenaArtikla = $("#Artikli_JedCijenaArtikla").val();
+        console.log('jedinicnaCijenaArtikla:' + jedinicnaCijenaArtikla);
+        var kolicinaArtikala = $("#Kolicina").val();
+        console.log('kolicinaArtikala:' + kolicinaArtikala);
+
+        var Ukupno = jedinicnaCijenaArtikla * kolicinaArtikala;
+        console.log('Ukupno:' + roundNumber(Ukupno, 2));
+        console.log(roundNumber(Ukupno, 2));
+        $("#UkupnaCijenaStavke").val(roundNumber(Ukupno, 2));
+
+    };
+    function CalculateFirst() {
+        
+        console.log('inicijalni izračun');
+        var jedinicnaCijenaArtikla = $("#Artikli_NazivArtikla").val();
+        var kolicinaArtikala = $("#Kolicina").val();
+
+        var Ukupno = jedinicnaCijenaArtikla * kolicinaArtikala;
+        console.log(roundNumber(Ukupno, 2));
+        $("#UkupnaCijenaStavke").val(roundNumber(Ukupno,2));
+
+    };
+    function roundNumber(num) {
+        num = Number(num).toFixed(2);  
+            return num;
+     
+    }
+
 
 </script>

@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using PagedList;
 using Ponuda.Models;
 using Newtonsoft.Json;
-using Ponuda.ViewModel;
+
 
 namespace Ponuda.Controllers
 {
@@ -17,7 +17,8 @@ namespace Ponuda.Controllers
     {
         private testDBEntities db = new testDBEntities();
 
-         public SelectList artikli = null;
+        //public object artikli = null;
+      
 
         // GET: Ponudes
         public ActionResult Index(string sortOrder, string CurrentSort, int? page)
@@ -51,8 +52,8 @@ namespace Ponuda.Controllers
         }
 
 
+       
         // GET: Ponude/StavkaEdit/5
-        [OutputCache(Duration = 60)]
         public ActionResult StavkaEdit(int? id)
         {
             Stavke ponude = db.Stavke.Find(id);
@@ -60,17 +61,12 @@ namespace Ponuda.Controllers
             {
                 return HttpNotFound();
             }
-            
 
-            if (artikli == null)
-            {
-                System.Diagnostics.Debug.WriteLine("LIsta artikala NIJE null");
-                artikli = new SelectList(db.Artikli, "ArtikalId", "NazivArtikla");
-            } else {
-                System.Diagnostics.Debug.WriteLine("LIsta artikala je null");
-            }
-            
-            ViewBag.Artikli = artikli;
+
+
+          
+              var  artikl = new SelectList(db.Artikli.Where(x=>x.ArtikalId == ponude.ArtikalId), "ArtikalId", "NazivArtikla");
+             ViewBag.Artikli = artikl;
             return PartialView("StavkaEdit", ponude);
 
         }
@@ -202,7 +198,41 @@ namespace Ponuda.Controllers
             });
             return Json(value, JsonRequestBehavior.AllowGet);
         }
-       
+
+        public ActionResult GetArtikls(int id,int pageIndex, int pageSize)
+        {
+            //id da mogu prvog pokazati
+
+            var query = (from c in db.Artikli
+                         orderby c.NazivArtikla ascending
+                         select c )
+                         .Skip(pageIndex * pageSize)
+                         .Take(pageSize);
+            return Json(query.ToList(), JsonRequestBehavior.AllowGet);
+
+        }
+        public ActionResult GetArtiklsAll()
+        {
+            //id da mogu prvog pokazati
+
+            var query = (from c in db.Artikli
+                         orderby c.NazivArtikla ascending
+                         select 
+                         c.NazivArtikla);
+            return Json(query.ToList(), JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult GetArtikalById(int id)
+        {
+
+            var query = (from c in db.Artikli where c.ArtikalId == id
+                         select c);
+            return Json(query.ToList(), JsonRequestBehavior.AllowGet);
+        }
+
+        
+
     }
     
 }

@@ -11,12 +11,16 @@ namespace Ponuda.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Stavke
     {
         public int StavkaId { get; set; }
         public Nullable<int> PonudaId { get; set; }
         public Nullable<int> ArtikalId { get; set; }
+
+        [Display(Name = "Koli»ina")]
+        [Required]
         public Nullable<int> Kolicina { get; set; }
         public Nullable<decimal> UkupnaCijenaStavke { get; set; }
     
