@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using PagedList;
 using Ponuda.Models;
 using Newtonsoft.Json;
-
+using Ponuda.ViewModel;
 
 namespace Ponuda.Controllers
 {
@@ -17,6 +17,7 @@ namespace Ponuda.Controllers
     {
         private testDBEntities db = new testDBEntities();
 
+         public SelectList artikli = null;
 
         // GET: Ponudes
         public ActionResult Index(string sortOrder, string CurrentSort, int? page)
@@ -26,7 +27,10 @@ namespace Ponuda.Controllers
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
             IPagedList<Ponude> svePonude = null;
 
-
+            //if (artikli == null)
+            //{
+            //    artikli = new SelectList(db.Artikli, "ArtikalId", "NazivArtikla");
+            //}
             svePonude = db.Ponude.OrderBy(x => x.PonudaID).ToPagedList(pageIndex, pageSize);
             return View(svePonude);
         }
@@ -48,6 +52,7 @@ namespace Ponuda.Controllers
 
 
         // GET: Ponude/StavkaEdit/5
+        [OutputCache(Duration = 60)]
         public ActionResult StavkaEdit(int? id)
         {
             Stavke ponude = db.Stavke.Find(id);
@@ -55,6 +60,17 @@ namespace Ponuda.Controllers
             {
                 return HttpNotFound();
             }
+            
+
+            if (artikli == null)
+            {
+                System.Diagnostics.Debug.WriteLine("LIsta artikala NIJE null");
+                artikli = new SelectList(db.Artikli, "ArtikalId", "NazivArtikla");
+            } else {
+                System.Diagnostics.Debug.WriteLine("LIsta artikala je null");
+            }
+            
+            ViewBag.Artikli = artikli;
             return PartialView("StavkaEdit", ponude);
 
         }
@@ -62,27 +78,17 @@ namespace Ponuda.Controllers
         public ActionResult StavkaEdit(Stavke stavka)
 
         {
-
-            Stavke jednastavka = db.Stavke.Where(m => m.StavkaId == stavka.StavkaId).FirstOrDefault();
-
+            Stavke jednastavka = db.Stavke.Where(m => m.StavkaId == stavka.StavkaId).FirstOrDefault(); 
             jednastavka.UkupnaCijenaStavke = stavka.UkupnaCijenaStavke;
             jednastavka.Kolicina = stavka.Kolicina;
-
-
-
+            jednastavka.ArtikalId = stavka.ArtikalId;
             db.SaveChanges();
-
             return RedirectToAction("Index", "Ponude");
 
 
 
         }
-
-
-
-
-
-
+        
         // GET: Ponudes/Create
         public ActionResult Create()
         {
@@ -135,6 +141,7 @@ namespace Ponuda.Controllers
                 return RedirectToAction("Index");
             }
             return View(ponude);
+
         }
 
         // GET: Ponudes/Delete/5
@@ -195,6 +202,7 @@ namespace Ponuda.Controllers
             });
             return Json(value, JsonRequestBehavior.AllowGet);
         }
+       
     }
     
 }

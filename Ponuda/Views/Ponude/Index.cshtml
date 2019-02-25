@@ -182,8 +182,10 @@
         //$(document).on("input", ".nummask", function (e) {
         //    this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         //});
+      
         $(document).ready(function () {
-
+            //LOAD ARTIKALA SAMO JEDNOM
+          
 
             $("#tblPonudeList tr").click(function () {
                 var tableData = $(this).children("th").map(function () {
@@ -314,40 +316,14 @@
             }
         };
         function StavkaEdit(StavkaID) {
-
-            // var StavakaID = $("#PonudaId").val();
             console.log('StavkaID=' + StavkaID);
             //var url = "/api/Data/GetStavkaById?StavkaId=" + StavkaID;
             var url = "/Ponude/StavkaEdit/" + StavkaID;
-          
-
             $.get(url, function (partialView) {
                 $("#MyModal").html(partialView);
                 $("#MyModal").modal();
             });
 
-
-            //$("#ModalTitle").html("Ažuriranje stavke");
-            //$("#MyModal").modal();
-            //$.ajax({
-            //    type: "GET",
-            //    url: url,
-            //    success: function (data) {
-            //        var obj = data;
-            //        console.log(obj);
-            //        // console.log(data.Kolicina);
-
-            //        $("#JedcijenaArtikla").val(data.Artikli.JedCijenaArtikla);
-            //        $("#UkupnaCijenaStavke").val(data.UkupnaCijenaStavke);
-            //        $("#Kolicina").val(data.Kolicina);
-
-
-            //        $("#JedcijenaArtikla").change(function () {
-            //            this.value = parseFloat(this.value).toFixed(2);
-            //        });
-            //    }
-            //});
-            //$(".nummask").inputmask('Regex', { regex: "^[0-9]{1,6}(\\.\\d{1,2})?$" });
         };
         function PonudaSave() {
 

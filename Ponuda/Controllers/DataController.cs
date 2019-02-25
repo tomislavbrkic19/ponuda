@@ -27,7 +27,16 @@ namespace Ponuda.Controllers
           
             return Json(stavka);
         }
+        [System.Web.Http.Route("api/Data/GetArtikli")]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult GetArtikli()
+        {
+            System.Diagnostics.Debug.WriteLine("Dohvat artikala");
+            var artikli = db.Artikli.ToList();
 
+
+            return Json(artikli);
+        }
 
     }
 }
