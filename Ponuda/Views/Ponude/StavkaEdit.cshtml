@@ -24,6 +24,7 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @*@Html.HiddenFor(model => model.PonudaID)*@
 
+                @Html.Hidden("PonudaId")
                 @Html.Hidden("StavkaId")
                 @Html.Hidden("ArtikalId")
                 @*<div class="form-group">
@@ -51,7 +52,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.Artikli.JedCijenaArtikla, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.Artikli.JedCijenaArtikla, htmlAttributes: new { @class = "control-label col-md-4" })
 
                     </div>
                     <div class="col-md-9">
@@ -61,26 +62,26 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.Kolicina, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.Kolicina, htmlAttributes: new { @class = "control-label col-md-4" })
                     </div>
                     <div class="col-md-9">
-                        @Html.EditorFor(model => model.Kolicina, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Kolicina, new { htmlAttributes = new { @class = "form-control", min = 1, max = 9999999, pattern = @"^([a-zA-Z .&'-]+)$" } })
                         @Html.ValidationMessageFor(model => model.Kolicina, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.UkupnaCijenaStavke, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.UkupnaCijenaStavke, htmlAttributes: new { @class = "control-label col-md-4" })
                     </div>
                     <div class="col-md-9">
-                        @Html.EditorFor(model => model.UkupnaCijenaStavke, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.UkupnaCijenaStavke, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                         @Html.ValidationMessageFor(model => model.UkupnaCijenaStavke, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" class="btn btn-default" />
+                        <input type="submit" value="Save" id="btnspremi" class="btn btn-default" />
                     </div>
                 </div>
             </div>
@@ -119,8 +120,18 @@
      s= '<option ></option>';
     $(document).ready(function () {
         GetData();
-
-
+        $("#Kolicina").bind("propertychange change click keyup input paste", function (event) {
+            if ($("#Kolicina").val().length == 0 || $("#Kolicina").val() == 0) {
+                console.log('prazno, nula');
+                $("#Kolicina").css("background", "coral");
+                $("#btnspremi").attr("disabled", "disabled");
+            } else {
+                $("#btnspremi").removeAttr('disabled');
+                $("#Kolicina").css("background", "#00FF00");
+                Calculate();
+            }
+            
+        });
 
         $("#Artikli").scroll(function (event) {
             console.log('Skorlam');
@@ -141,7 +152,7 @@
                 lastScrollTop = st;
             });
 
-        $("#Artikli").on('click', function () {
+        $("#Artikli").on('change', function () {
           // find artikal i kalkulacija
             //console.log('pero');
             SetArtikal($(this).find("option:selected").text());
@@ -175,22 +186,10 @@
             success: function (data) {
                 if (data != null) {
                     JsonArtikli = data;
-                    //for (var i = 0; i < data.length; i++) {
-                    //    $("#Artikli").append("<h2>" +
-                    //        data[i].NazivArtikla + "</h2>");
-
-                     @*s += '<option value="' + @Html.Raw(Json.Encode(Model.ArtikalId)) + '">' + @Html.Raw(Json.Encode(Model.Artikli.NazivArtikla)) + '</option>';*@
                     for (var i = 0; i < data.length; i++) {
                         s += '<option value="' + data[i].ArtikalId + '">' + data[i].NazivArtikla + '</option>';
-                      //  dropdown.append($('<option></option>').attr('value', data[i].ArtikalId).text(data[i].NazivArtikla));
                     }
                     $("#Artikli").html(s);
-                    //$('#Artikli option')[1].selected = true;
-                    //console.log("Označlen:");
-                    //console.log($("#Artikli").find("option:selected").val());
-                    //SetArtikal($("#Artikli").find("option:selected").text());
-                    Calculate();
-                    //}
                     pageIndex++;
                 }
             },
@@ -206,11 +205,8 @@
         });
     };
     function SetArtikal(x) {
-
         $("#Artikli_NazivArtikla").val(x);
-
-
-    };
+   };
 
     function GetJedCijena(id) {
         $.ajax({
@@ -219,20 +215,22 @@
             async: false,
             data: { id: id },
             success: function (data) {
-                console.log(data[0].JedCijenaArtikla);
+                
                 $("#Artikli_JedCijenaArtikla").val(roundNumber(data[0].JedCijenaArtikla));
+                $("#ArtikalId").val(data[0].ArtikalId);
+                $("#PonudaId").val(data[0].PonudaId);
             }
         });
     };
     function Calculate() {
         var jedinicnaCijenaArtikla = $("#Artikli_JedCijenaArtikla").val();
-        console.log('jedinicnaCijenaArtikla:' + jedinicnaCijenaArtikla);
+       // console.log('jedinicnaCijenaArtikla:' + jedinicnaCijenaArtikla);
         var kolicinaArtikala = $("#Kolicina").val();
         console.log('kolicinaArtikala:' + kolicinaArtikala);
 
         var Ukupno = jedinicnaCijenaArtikla * kolicinaArtikala;
-        console.log('Ukupno:' + roundNumber(Ukupno, 2));
-        console.log(roundNumber(Ukupno, 2));
+       // console.log('Ukupno:' + roundNumber(Ukupno, 2));
+       // console.log(roundNumber(Ukupno, 2));
         $("#UkupnaCijenaStavke").val(roundNumber(Ukupno, 2));
 
     };

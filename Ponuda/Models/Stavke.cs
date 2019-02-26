@@ -19,9 +19,10 @@ namespace Ponuda.Models
         public Nullable<int> PonudaId { get; set; }
         public Nullable<int> ArtikalId { get; set; }
 
-        [Display(Name = "KoliÈina")]
-        [Required]
+        [Display(Name = "Kolièina")]
         public Nullable<int> Kolicina { get; set; }
+
+        [Display(Name = "Ukupna cijena stavke")]
         public Nullable<decimal> UkupnaCijenaStavke { get; set; }
     
         private  Ponude Ponude { get; set; }

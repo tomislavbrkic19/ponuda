@@ -9,7 +9,8 @@ using System.Web.Mvc;
 using PagedList;
 using Ponuda.Models;
 using Newtonsoft.Json;
-
+using System.Data.SqlClient;
+using System.Web.UI.WebControls;
 
 namespace Ponuda.Controllers
 {
@@ -61,24 +62,35 @@ namespace Ponuda.Controllers
             {
                 return HttpNotFound();
             }
-
-
-
-          
-              var  artikl = new SelectList(db.Artikli.Where(x=>x.ArtikalId == ponude.ArtikalId), "ArtikalId", "NazivArtikla");
+            var  artikl = new SelectList(db.Artikli.Where(x=>x.ArtikalId == ponude.ArtikalId), "ArtikalId", "NazivArtikla");
              ViewBag.Artikli = artikl;
             return PartialView("StavkaEdit", ponude);
 
         }
         [HttpPost]
-        public ActionResult StavkaEdit(Stavke stavka)
-
+        public ActionResult StavkaEdit( Stavke stavka)
         {
-            Stavke jednastavka = db.Stavke.Where(m => m.StavkaId == stavka.StavkaId).FirstOrDefault(); 
+            Stavke jednastavka = db.Stavke.Where(m => m.StavkaId == stavka.StavkaId).FirstOrDefault();
+            System.Diagnostics.Debug.WriteLine("kol:"+stavka.Kolicina);
+            System.Diagnostics.Debug.WriteLine("PonudaId:" + stavka.PonudaId);
+            System.Diagnostics.Debug.WriteLine("ArtikalId:" + stavka.ArtikalId);
+            System.Diagnostics.Debug.WriteLine("UkupnaCijenaStavke:" + stavka.UkupnaCijenaStavke);
+            System.Diagnostics.Debug.WriteLine("Kolicina:" + stavka.Kolicina);
+            
             jednastavka.UkupnaCijenaStavke = stavka.UkupnaCijenaStavke;
             jednastavka.Kolicina = stavka.Kolicina;
             jednastavka.ArtikalId = stavka.ArtikalId;
             db.SaveChanges();
+
+            //UPdate u bazi, stora...
+            using (var conn = new SqlConnection(@";data source=.\SQLEXPRESS;initial catalog=testDB;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
+            using (SqlCommand cmd = new SqlCommand("CalculateStavke", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@PonudaId", stavka.PonudaId);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
             return RedirectToAction("Index", "Ponude");
 
 
@@ -129,7 +141,8 @@ namespace Ponuda.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "PonudaID,UkupnaCijena,DatumPonude")] Ponude ponude)
-        {
+        {         
+
             if (ModelState.IsValid)
             {
                 db.Entry(ponude).State = EntityState.Modified;
