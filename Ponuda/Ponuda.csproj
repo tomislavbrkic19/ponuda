@@ -250,6 +250,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="js\Dropdown.js" />
+    <Content Include="Models\00_Ponude.edmx.sql" />
     <Content Include="Models\Ponude.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Ponude.Context.cs</LastGenOutput>
@@ -288,6 +289,10 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="SQL\00_AllSQLCreate.sql" />
+    <Content Include="SQL\01_InsertRandomArtikli.sql" />
+    <Content Include="SQL\02_InsertRandomPonude.sql" />
+    <Content Include="SQL\03_sp_Calculate.sql" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

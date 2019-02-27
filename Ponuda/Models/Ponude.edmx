@@ -39,7 +39,7 @@
     <Key>
       <PropertyRef Name="StavkaId" />
     </Key>
-    <Property Name="StavkaId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="StavkaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PonudaId" Type="int" Nullable="true" />
     <Property Name="ArtikalId" Type="int" Nullable="true" />
     <Property Name="Kolicina" Type="int" Nullable="true" />

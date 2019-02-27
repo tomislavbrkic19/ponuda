@@ -237,7 +237,7 @@ namespace Ponuda.Controllers
         public static void CalculatePonuda(int? PonudaId)
         {
             //UPdate u bazi, stora...
-            using (var conn = new SqlConnection(@";data source=.\SQLEXPRESS14;initial catalog=testDBNEW;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
+            using (var conn = new SqlConnection(@";data source=.\SQLEXPRESS;initial catalog=testDB;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
             using (SqlCommand cmd = new SqlCommand("CalculateStavke", conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
