@@ -301,7 +301,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Ponude\Create.cshtml" />
+    <Content Include="Views\Ponude\StavkaCreate.cshtml" />
     <Content Include="Views\Ponude\Delete.cshtml" />
     <Content Include="Views\Ponude\Details.cshtml" />
     <Content Include="Views\Ponude\Edit.cshtml" />

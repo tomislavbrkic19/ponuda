@@ -18,7 +18,8 @@
 <h2>Index</h2>
 <script src="~/js/Dropdown.js"></script>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <a href='/Ponude/CreatePonuda' class='btn btn-sm btn-success'>Kreiraj ponudu</a>
+ 
 </p>
 
 
@@ -51,13 +52,9 @@
                             @Html.DisplayFor(modelItem => item.DatumPonude)
                         </td>
                         <td>
-                            @*<a href="#" data-toggle="onclick" data-trigger="onclick" id="@item.PonudaID" onclick="loadPonuda(id);">@item.UkupnaCijena</a>*@
-                            @Html.DisplayFor(modelItem => item.UkupnaCijena)@*<a onclick="loadPonuda(@item.PonudaID);">@item.UkupnaCijena</a>*@
-                            @*<td>
-                                    @Html.ActionLink("Edit", "Edit", new { id = item.PonudaID }) |
-                                    @Html.ActionLink("Details", "Details", new { id = item.PonudaID }) |
-                                    @Html.ActionLink("Delete", "Delete", new { id = item.PonudaID })
-                                </td>*@
+                           
+                            @Html.DisplayFor(modelItem => item.UkupnaCijena)
+                          
                     </tr>
 
                 }
@@ -74,7 +71,7 @@
         </div>
     </div>
     <div class="col-md-8">
-        <div class="row" style="height:100px">
+        <div class="row" >
             <div class="col-md-4">
                 Broj ponude:
                 <input type="text" id="PonudaId" disabled>
@@ -85,12 +82,18 @@
                 <input type="text" id="DatumPonude" disabled>
 
             </div>
+            
+        </div>
+        <div class="row" >
+           </br>
             <div class="col-md-4">
-                <a href='#' class='btn btn-sm btn-success' onclick='PonudaSave()'>Spremi ponudu</a>
+                <a class='btn btn-sm btn-info' onclick='StavkaCreate()'>Dodaj stavku</a>
+            </div>
+            <div class="col-md-4">
+
             </div>
         </div>
         <div class="row">
-           
             Sadržaj ponude
             <div class="table-responsive">
                 <table id="tblPonudaDetails" class="table table-striped table-bordered">
@@ -122,57 +125,18 @@
 </div>
 <!--MODAL za Edit STAVKE-->
     <div class="modal fade" id="MyModal">
-        @*<div class="modal-dialog">
-            <div class="modal-content">
-                <a href="#" class="close" data-dismiss="modal">&times;</a>
-                <div class="modal-header">
-
-                    <h4 id="ModalTitle"></h4>
-                </div>
-                <div class="modal-body">
-                    <form id="form">
-                        <fieldset id="SubmitForm">
-                            <div class="form-group">
-                                Artikal: <input id="Artikal" class="nummask" type="text" name="Artikal" required><br>
-                            </div>
-                            <div class="form-group">
-                                Jedinična cijena: <input id="JedcijenaArtikla" name="JedcijenaArtikla"><br>
-                            </div>
-                            <div class="form-group">
-                                Količina: <input id="Kolicina" type="number" name="Kolicina" pattern="[A-Za-z]{3}" title="Three letter country code"><br>
-                            </div>
-                            <div class="form-group">
-                                ukupna cijena: <input id="UkupnaCijenaStavke" type="text" name="UkupnaCijenaStavke"><br>
-                            </div>
-                           
-                            <div class="form-group">
-                                <a href="#" onclick='SaveAdminStatus()' class="btn btn-block btn-danger" id="SaveStudentRecord">Save</a>
-                            </div>
-
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-        </div>*@
+      
     </div>
 
 
     <script>
-        //Decimal Number
-        //$(document).on("input", ".nummask", function (e) {
-        //    this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
-        //});
       
         $(document).ready(function () {
-            //LOAD ARTIKALA SAMO JEDNOM
-          
-
             $("#tblPonudeList tr").click(function () {
                 var tableData = $(this).children("th").map(function () {
                     loadPonuda($(this).text());
                 }).get();
             });
-
 
             function setData(id) {
 
@@ -273,7 +237,7 @@
                 var btnRemove = $("<input />");
                 btnRemove.attr("class", "btn btn-sm btn-danger");
                 btnRemove.attr("type", "button");
-                btnRemove.attr("onclick", "Remove(this,\"tblPonudaDetails\");");
+                btnRemove.attr("onclick", "Remove('"+StavkaID+"');");
                 btnRemove.val("Remove");
                 cell.append(btnRemove);
 
@@ -283,26 +247,37 @@
             };
 
         };
-        function Remove(button, tableName) {
-
-            var row = $(button).closest("TR");
-
+        function Remove( StavkaID) {
             if (confirm("Da li želite obrisati stavku")) {
-                //Get the reference of the Table.
-                console.log('tableName' + tableName);
-                var table = $("#" + tableName)[0];
-                //Delete the Table row using it's Index.
-                table.deleteRow(row[0].rowIndex);
+                var url = "/Ponude/Delete?Stavkaid=" + StavkaID;
+                $.get(url, function () {
+                    location.reload();
+                });
             }
         };
         function StavkaEdit(StavkaID) {
             console.log('StavkaID=' + StavkaID);
             //var url = "/api/Data/GetStavkaById?StavkaId=" + StavkaID;
-            var url = "/Ponude/StavkaEdit/" + StavkaID;
+          
             $.get(url, function (partialView) {
                 $("#MyModal").html(partialView);
                 $("#MyModal").modal();
             });
+
+        };
+        function StavkaCreate() {
+            var ponudaId = $("#PonudaId").val();
+            console.log(ponudaId);
+            if (ponudaId >0) {
+                var url = "/Ponude/StavkaCreate?PonudaId="+ponudaId;
+                $.get(url, function (partialView) {
+                    $("#MyModal").html(partialView);
+                    $("#MyModal").modal();
+                });
+            } else {
+                alert('Odaberite ponudu!');
+            }
+            
 
         };
         function PonudaSave() {

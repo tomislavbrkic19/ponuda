@@ -19,7 +19,7 @@ namespace Ponuda.Controllers
         private testDBEntities db = new testDBEntities();
 
         //public object artikli = null;
-      
+
 
         // GET: Ponudes
         public ActionResult Index(string sortOrder, string CurrentSort, int? page)
@@ -28,11 +28,6 @@ namespace Ponuda.Controllers
             int pageIndex = 1;
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
             IPagedList<Ponude> svePonude = null;
-
-            //if (artikli == null)
-            //{
-            //    artikli = new SelectList(db.Artikli, "ArtikalId", "NazivArtikla");
-            //}
             svePonude = db.Ponude.OrderBy(x => x.PonudaID).ToPagedList(pageIndex, pageSize);
             return View(svePonude);
         }
@@ -53,7 +48,7 @@ namespace Ponuda.Controllers
         }
 
 
-       
+
         // GET: Ponude/StavkaEdit/5
         public ActionResult StavkaEdit(int? id)
         {
@@ -62,62 +57,52 @@ namespace Ponuda.Controllers
             {
                 return HttpNotFound();
             }
-            var  artikl = new SelectList(db.Artikli.Where(x=>x.ArtikalId == ponude.ArtikalId), "ArtikalId", "NazivArtikla");
-             ViewBag.Artikli = artikl;
+            var artikl = new SelectList(db.Artikli.Where(x => x.ArtikalId == ponude.ArtikalId), "ArtikalId", "NazivArtikla");
+            ViewBag.Artikli = artikl;
             return PartialView("StavkaEdit", ponude);
-
         }
         [HttpPost]
-        public ActionResult StavkaEdit( Stavke stavka)
+        public ActionResult StavkaEdit(Stavke stavka)
         {
             Stavke jednastavka = db.Stavke.Where(m => m.StavkaId == stavka.StavkaId).FirstOrDefault();
-            System.Diagnostics.Debug.WriteLine("kol:"+stavka.Kolicina);
+            System.Diagnostics.Debug.WriteLine("kol:" + stavka.Kolicina);
             System.Diagnostics.Debug.WriteLine("PonudaId:" + stavka.PonudaId);
             System.Diagnostics.Debug.WriteLine("ArtikalId:" + stavka.ArtikalId);
             System.Diagnostics.Debug.WriteLine("UkupnaCijenaStavke:" + stavka.UkupnaCijenaStavke);
             System.Diagnostics.Debug.WriteLine("Kolicina:" + stavka.Kolicina);
-            
+
             jednastavka.UkupnaCijenaStavke = stavka.UkupnaCijenaStavke;
             jednastavka.Kolicina = stavka.Kolicina;
             jednastavka.ArtikalId = stavka.ArtikalId;
             db.SaveChanges();
 
+
             //UPdate u bazi, stora...
-            using (var conn = new SqlConnection(@";data source=.\SQLEXPRESS;initial catalog=testDB;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
-            using (SqlCommand cmd = new SqlCommand("CalculateStavke", conn))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@PonudaId", stavka.PonudaId);
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            CalculatePonuda(stavka.PonudaId);
             return RedirectToAction("Index", "Ponude");
-
-
-
         }
-        
-        // GET: Ponudes/Create
-        public ActionResult Create()
+
+
+        public ActionResult StavkaCreate(int PonudaId)
         {
+            ViewBag.PonudaId = PonudaId;
             return View();
         }
 
-        // POST: Ponudes/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PonudaID,UkupnaCijena,DatumPonude")] Ponude ponude)
+        public ActionResult StavkaCreate([Bind(Include = "PonudaId,ArtikalId,Kolicina, UkupnaCijenaStavke")] Stavke stavka)
         {
             if (ModelState.IsValid)
             {
-                db.Ponude.Add(ponude);
+                
+                db.Stavke.Add(stavka);
                 db.SaveChanges();
+                CalculatePonuda(stavka.PonudaId);
                 return RedirectToAction("Index");
             }
 
-            return View(ponude);
+            return View("Index");
         }
 
         // GET: Ponudes/Edit/5
@@ -141,7 +126,7 @@ namespace Ponuda.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "PonudaID,UkupnaCijena,DatumPonude")] Ponude ponude)
-        {         
+        {
 
             if (ModelState.IsValid)
             {
@@ -153,29 +138,13 @@ namespace Ponuda.Controllers
 
         }
 
-        // GET: Ponudes/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int Stavkaid)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Ponude ponude = db.Ponude.Find(id);
-            if (ponude == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ponude);
-        }
-
-        // POST: Ponudes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Ponude ponude = db.Ponude.Find(id);
-            db.Ponude.Remove(ponude);
+            Stavke stavka = db.Stavke.Where(x => x.StavkaId ==Stavkaid).SingleOrDefault();
+            int? IdPonude= stavka.PonudaId;
+            db.Stavke.Remove(stavka);
             db.SaveChanges();
+            CalculatePonuda(IdPonude);
             return RedirectToAction("Index");
         }
 
@@ -191,7 +160,7 @@ namespace Ponuda.Controllers
         public JsonResult GetPonudaById(int PonudaId)
         {
             var lookup = db.Ponude.Where(x => x.PonudaID == PonudaId).SingleOrDefault();
-          
+
             string value = string.Empty;
             value = JsonConvert.SerializeObject(lookup, Formatting.Indented, new JsonSerializerSettings
             {
@@ -212,13 +181,13 @@ namespace Ponuda.Controllers
             return Json(value, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetArtikls(int id,int pageIndex, int pageSize)
+        public ActionResult GetArtikls(int id, int pageIndex, int pageSize)
         {
-            //id da mogu prvog pokazati
+
 
             var query = (from c in db.Artikli
                          orderby c.NazivArtikla ascending
-                         select c )
+                         select c)
                          .Skip(pageIndex * pageSize)
                          .Take(pageSize);
             return Json(query.ToList(), JsonRequestBehavior.AllowGet);
@@ -226,11 +195,10 @@ namespace Ponuda.Controllers
         }
         public ActionResult GetArtiklsAll()
         {
-            //id da mogu prvog pokazati
 
             var query = (from c in db.Artikli
                          orderby c.NazivArtikla ascending
-                         select 
+                         select
                          c.NazivArtikla);
             return Json(query.ToList(), JsonRequestBehavior.AllowGet);
 
@@ -244,7 +212,41 @@ namespace Ponuda.Controllers
             return Json(query.ToList(), JsonRequestBehavior.AllowGet);
         }
 
-        
+        public ActionResult CreatePonuda()
+        {
+
+            try
+            {
+                Ponude ponuda = new Ponude();
+                ponuda.UkupnaCijena = (decimal)0.00;
+                ponuda.DatumPonude = DateTime.UtcNow;
+                db.Ponude.Add(ponuda);
+                db.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return RedirectToAction("Index");
+
+
+
+        }
+        public static void CalculatePonuda(int? PonudaId)
+        {
+            //UPdate u bazi, stora...
+            using (var conn = new SqlConnection(@";data source=.\SQLEXPRESS14;initial catalog=testDB;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
+            using (SqlCommand cmd = new SqlCommand("CalculateStavke", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@PonudaId", PonudaId);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
 
     }
     

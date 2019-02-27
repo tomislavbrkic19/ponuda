@@ -1,7 +1,7 @@
 ﻿@model Ponuda.Models.Stavke
 
 @{
-    ViewBag.Title = "Uređivanje Stavke";
+    ViewBag.Title = "Kreiranje Stavke";
 
 }
 
@@ -18,67 +18,74 @@
             {
                 @Html.AntiForgeryToken()
 
-            <div class="form-horizontal">
-                <h4>Edit Stavke</h4>
+                <div class="form-horizontal">
+                    <h4>Dodavanje Stavke</h4>
 
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-      
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                @Html.Hidden("PonudaId")
-                @Html.Hidden("StavkaId")
-                @Html.Hidden("ArtikalId")
-               
-                <div class="form-group">
-                    <div class="col-md-3">
-                        <label class="control-label col-md-2">Odabrani artikal:</label>
-                    </div>
-                    <div class="col-md-9">
-                        @Html.EditorFor(model => model.Artikli.NazivArtikla, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-3">
-                        <label class="control-label col-md-2">Popis artikala:</label>
-                    </div>
-                    <div class="col-md-9">
-                        <select class="form-control" id="Artikli" name="Artikli" size="5"></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-3">
-                        @Html.LabelFor(model => model.Artikli.JedCijenaArtikla, htmlAttributes: new { @class = "control-label col-md-4" })
 
+                   
+                   
+                    @Html.Hidden("ArtikalId")
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label col-md-2">Broj ponude:</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" value="@ViewBag.PonudaId" id="PonudaId" class="form-control" disabled/>
+                        </div>
                     </div>
-                    <div class="col-md-9">
-                        @Html.EditorFor(model => model.Artikli.JedCijenaArtikla, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                        @Html.ValidationMessageFor(model => model.Artikli.JedCijenaArtikla, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label col-md-2">Odabrani artikal:</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.Artikli.NazivArtikla, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-3">
-                        @Html.LabelFor(model => model.Kolicina, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label col-md-2">Popis artikala:</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select class="form-control" id="Artikli" name="Artikli" size="5"></select>
+                        </div>
                     </div>
-                    <div class="col-md-9">
-                        @Html.EditorFor(model => model.Kolicina, new { htmlAttributes = new { @class = "form-control", min = 1, max = 9999999, pattern = @"^([a-zA-Z .&'-]+)$" } })
-                        @Html.ValidationMessageFor(model => model.Kolicina, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-3">
-                        @Html.LabelFor(model => model.UkupnaCijenaStavke, htmlAttributes: new { @class = "control-label col-md-4" })
-                    </div>
-                    <div class="col-md-9">
-                        @Html.EditorFor(model => model.UkupnaCijenaStavke, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                        @Html.ValidationMessageFor(model => model.UkupnaCijenaStavke, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Artikli.JedCijenaArtikla, htmlAttributes: new { @class = "control-label col-md-4" })
 
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" id="btnspremi" class="btn btn-default" />
+                        </div>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.Artikli.JedCijenaArtikla, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                            @Html.ValidationMessageFor(model => model.Artikli.JedCijenaArtikla, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Kolicina, htmlAttributes: new { @class = "control-label col-md-4" })
+                        </div>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.Kolicina, new { htmlAttributes = new { @class = "form-control", @Value = "1", min = 1, max = 9999999, pattern = @"^([a-zA-Z .&'-]+)$" } })
+                            @Html.ValidationMessageFor(model => model.Kolicina, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.UkupnaCijenaStavke, htmlAttributes: new { @class = "control-label col-md-4" })
+                        </div>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.UkupnaCijenaStavke, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.UkupnaCijenaStavke, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" id="btnspremi" class="btn btn-default" />
+                        </div>
                     </div>
                 </div>
-            </div>
             }
 
             @*<div>
@@ -114,6 +121,7 @@
      s= '<option ></option>';
     $(document).ready(function () {
         GetData();
+        
         $("#Kolicina").bind("propertychange change click keyup input paste", function (event) {
             if ($("#Kolicina").val().length == 0 || $("#Kolicina").val() == 0) {
                 console.log('prazno, nula');
@@ -124,7 +132,7 @@
                 $("#Kolicina").css("background", "#00FF00");
                 Calculate();
             }
-            
+
         });
 
         $("#Artikli").scroll(function (event) {
@@ -136,9 +144,9 @@
                     currentScroll = st + selectboxheight;
                     if ((currentScroll + (numOfOptionBeforeToLoadNextSet * singleoptionheight)) >= totalheight) {
                         currentPageNo++;
-                        
-                        s += '<option value="' + @Html.Raw(Json.Encode(Model.ArtikalId)) + '">' + @Html.Raw(Json.Encode(Model.Artikli.NazivArtikla)) + '</option>';
-                        GetData(0);
+
+                      
+                       // GetData(0);
                     }
                 } else {
                     // upscroll code
@@ -169,13 +177,10 @@
 
     function GetData(up) {
 
-        var id = $("#ArtikalId").val();
-
-
         $.ajax({
             type: 'GET',
             url: '/Ponude/GetArtikls',
-            data: { "id":id,"pageindex": pageIndex, "pagesize": pageSize },
+            data: { "id":1,"pageindex": pageIndex, "pagesize": pageSize },
             dataType: 'json',
             success: function (data) {
                 if (data != null) {
@@ -185,6 +190,12 @@
                     }
                     $("#Artikli").html(s);
                     pageIndex++;
+                    $('#Artikli option')[1].selected = true;
+                    //if (up == 1) {
+                        GetJedCijena($("#Artikli").val());
+                        Calculate();
+                    //}
+                    
                 }
             },
             beforeSend: function () {
@@ -209,7 +220,7 @@
             async: false,
             data: { id: id },
             success: function (data) {
-                
+
                 $("#Artikli_JedCijenaArtikla").val(roundNumber(data[0].JedCijenaArtikla));
                 $("#ArtikalId").val(data[0].ArtikalId);
                 $("#PonudaId").val(data[0].PonudaId);
@@ -229,7 +240,7 @@
 
     };
     function CalculateFirst() {
-        
+
         console.log('inicijalni izračun');
         var jedinicnaCijenaArtikla = $("#Artikli_NazivArtikla").val();
         var kolicinaArtikala = $("#Kolicina").val();
@@ -240,9 +251,9 @@
 
     };
     function roundNumber(num) {
-        num = Number(num).toFixed(2);  
+        num = Number(num).toFixed(2);
             return num;
-     
+
     }
 
 
