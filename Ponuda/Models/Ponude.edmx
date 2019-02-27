@@ -4,72 +4,72 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="testDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Artikli">
-          <Key>
-            <PropertyRef Name="ArtikalId" />
-          </Key>
-          <Property Name="ArtikalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NazivArtikla" Type="nvarchar" MaxLength="255" />
-          <Property Name="JedCijenaArtikla" Type="decimal" Precision="18" Scale="2" />
-        </EntityType>
-        <EntityType Name="Ponude">
-          <Key>
-            <PropertyRef Name="PonudaID" />
-          </Key>
-          <Property Name="PonudaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UkupnaCijena" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="DatumPonude" Type="date" />
-          <Property Name="StavkeId" Type="int" />
-        </EntityType>
-        <EntityType Name="Stavke">
-          <Key>
-            <PropertyRef Name="StavkaId" />
-          </Key>
-          <Property Name="StavkaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PonudaId" Type="int" />
-          <Property Name="ArtikalId" Type="int" />
-          <Property Name="Kolicina" Type="int" />
-          <Property Name="UkupnaCijenaStavke" Type="decimal" Precision="18" Scale="2" />
-        </EntityType>
-        <Association Name="FK_Stavke_Artikli1">
-          <End Role="Artikli" Type="Self.Artikli" Multiplicity="0..1" />
-          <End Role="Stavke" Type="Self.Stavke" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Artikli">
-              <PropertyRef Name="ArtikalId" />
-            </Principal>
-            <Dependent Role="Stavke">
-              <PropertyRef Name="ArtikalId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Stavke_Ponude">
-          <End Role="Ponude" Type="Self.Ponude" Multiplicity="0..1" />
-          <End Role="Stavke" Type="Self.Stavke" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Ponude">
-              <PropertyRef Name="PonudaID" />
-            </Principal>
-            <Dependent Role="Stavke">
-              <PropertyRef Name="PonudaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityContainer Name="testDBModelStoreContainer">
-          <EntitySet Name="Artikli" EntityType="Self.Artikli" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Ponude" EntityType="Self.Ponude" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Stavke" EntityType="Self.Stavke" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Stavke_Artikli1" Association="Self.FK_Stavke_Artikli1">
-            <End Role="Artikli" EntitySet="Artikli" />
-            <End Role="Stavke" EntitySet="Stavke" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Stavke_Ponude" Association="Self.FK_Stavke_Ponude">
-            <End Role="Ponude" EntitySet="Ponude" />
-            <End Role="Stavke" EntitySet="Stavke" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema></edmx:StorageModels>
+    <Schema Namespace="testDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="testDBModelStoreContainer">
+    <EntitySet Name="Artikli" EntityType="testDBModel.Store.Artikli" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Ponude" EntityType="testDBModel.Store.Ponude" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Stavke" EntityType="testDBModel.Store.Stavke" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_Stavke_Artikli1" Association="testDBModel.Store.FK_Stavke_Artikli1">
+      <End Role="Artikli" EntitySet="Artikli" />
+      <End Role="Stavke" EntitySet="Stavke" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Stavke_Ponude" Association="testDBModel.Store.FK_Stavke_Ponude">
+      <End Role="Ponude" EntitySet="Ponude" />
+      <End Role="Stavke" EntitySet="Stavke" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Artikli">
+    <Key>
+      <PropertyRef Name="ArtikalId" />
+    </Key>
+    <Property Name="ArtikalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NazivArtikla" Type="nvarchar" Nullable="true" MaxLength="255" />
+    <Property Name="JedCijenaArtikla" Type="decimal" Nullable="true" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="Ponude">
+    <Key>
+      <PropertyRef Name="PonudaID" />
+    </Key>
+    <Property Name="PonudaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UkupnaCijena" Type="decimal" Nullable="true" Precision="18" Scale="2" />
+    <Property Name="DatumPonude" Type="datetime" Nullable="true" />
+    <Property Name="StavkeId" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Stavke">
+    <Key>
+      <PropertyRef Name="StavkaId" />
+    </Key>
+    <Property Name="StavkaId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="PonudaId" Type="int" Nullable="true" />
+    <Property Name="ArtikalId" Type="int" Nullable="true" />
+    <Property Name="Kolicina" Type="int" Nullable="true" />
+    <Property Name="UkupnaCijenaStavke" Type="decimal" Nullable="true" Precision="18" Scale="2" />
+  </EntityType>
+  <Association Name="FK_Stavke_Artikli1">
+    <End Role="Artikli" Type="testDBModel.Store.Artikli" Multiplicity="0..1" />
+    <End Role="Stavke" Type="testDBModel.Store.Stavke" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Artikli">
+        <PropertyRef Name="ArtikalId" />
+      </Principal>
+      <Dependent Role="Stavke">
+        <PropertyRef Name="ArtikalId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Stavke_Ponude">
+    <End Role="Ponude" Type="testDBModel.Store.Ponude" Multiplicity="0..1" />
+    <End Role="Stavke" Type="testDBModel.Store.Stavke" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ponude">
+        <PropertyRef Name="PonudaID" />
+      </Principal>
+      <Dependent Role="Stavke">
+        <PropertyRef Name="PonudaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="testDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -109,7 +109,7 @@
           <Key>
             <PropertyRef Name="StavkaId" />
           </Key>
-          <Property Name="StavkaId" Type="Int32" Nullable="false" />
+          <Property Name="StavkaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PonudaId" Type="Int32" />
           <Property Name="ArtikalId" Type="Int32" />
           <Property Name="Kolicina" Type="Int32" />
@@ -145,41 +145,40 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="testDBModelStoreContainer" CdmEntityContainer="testDBEntities">
-          <EntitySetMapping Name="Artikli">
-            <EntityTypeMapping TypeName="testDBModel.Artikli">
-              <MappingFragment StoreEntitySet="Artikli">
-                <ScalarProperty Name="JedCijenaArtikla" ColumnName="JedCijenaArtikla" />
-                <ScalarProperty Name="NazivArtikla" ColumnName="NazivArtikla" />
-                <ScalarProperty Name="ArtikalId" ColumnName="ArtikalId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Ponude">
-            <EntityTypeMapping TypeName="testDBModel.Ponude">
-              <MappingFragment StoreEntitySet="Ponude">
-                <ScalarProperty Name="StavkeId" ColumnName="StavkeId" />
-                <ScalarProperty Name="DatumPonude" ColumnName="DatumPonude" />
-                <ScalarProperty Name="UkupnaCijena" ColumnName="UkupnaCijena" />
-                <ScalarProperty Name="PonudaID" ColumnName="PonudaID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Stavke">
-            <EntityTypeMapping TypeName="testDBModel.Stavke">
-              <MappingFragment StoreEntitySet="Stavke">
-                <ScalarProperty Name="UkupnaCijenaStavke" ColumnName="UkupnaCijenaStavke" />
-                <ScalarProperty Name="Kolicina" ColumnName="Kolicina" />
-                <ScalarProperty Name="ArtikalId" ColumnName="ArtikalId" />
-                <ScalarProperty Name="PonudaId" ColumnName="PonudaId" />
-                <ScalarProperty Name="StavkaId" ColumnName="StavkaId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="testDBModelStoreContainer" CdmEntityContainer="testDBEntities">
+    <EntitySetMapping Name="Artikli">
+      <EntityTypeMapping TypeName="IsTypeOf(testDBModel.Artikli)">
+        <MappingFragment StoreEntitySet="Artikli">
+          <ScalarProperty Name="ArtikalId" ColumnName="ArtikalId" />
+          <ScalarProperty Name="NazivArtikla" ColumnName="NazivArtikla" />
+          <ScalarProperty Name="JedCijenaArtikla" ColumnName="JedCijenaArtikla" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ponude">
+      <EntityTypeMapping TypeName="IsTypeOf(testDBModel.Ponude)">
+        <MappingFragment StoreEntitySet="Ponude">
+          <ScalarProperty Name="PonudaID" ColumnName="PonudaID" />
+          <ScalarProperty Name="UkupnaCijena" ColumnName="UkupnaCijena" />
+          <ScalarProperty Name="DatumPonude" ColumnName="DatumPonude" />
+          <ScalarProperty Name="StavkeId" ColumnName="StavkeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Stavke">
+      <EntityTypeMapping TypeName="IsTypeOf(testDBModel.Stavke)">
+        <MappingFragment StoreEntitySet="Stavke">
+          <ScalarProperty Name="StavkaId" ColumnName="StavkaId" />
+          <ScalarProperty Name="PonudaId" ColumnName="PonudaId" />
+          <ScalarProperty Name="ArtikalId" ColumnName="ArtikalId" />
+          <ScalarProperty Name="Kolicina" ColumnName="Kolicina" />
+          <ScalarProperty Name="UkupnaCijenaStavke" ColumnName="UkupnaCijenaStavke" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -193,7 +192,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>

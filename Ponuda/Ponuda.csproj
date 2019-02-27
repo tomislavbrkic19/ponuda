@@ -255,6 +255,7 @@
       <LastGenOutput>Ponude.Context.cs</LastGenOutput>
       <DependentUpon>Ponude.edmx</DependentUpon>
     </Content>
+    <Content Include="Models\Ponude.edmx.sql" />
     <Content Include="Models\Ponude.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Ponude.edmx</DependentUpon>

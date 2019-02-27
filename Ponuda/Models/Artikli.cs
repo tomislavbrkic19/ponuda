@@ -25,6 +25,6 @@ namespace Ponuda.Models
         public Nullable<decimal> JedCijenaArtikla { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-      private ICollection<Stavke> Stavke { get; set; }
+        private ICollection<Stavke> Stavke { get; set; }
     }
 }
